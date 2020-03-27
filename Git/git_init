@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    repo=$PWD
+  else
+    repo=$1
+fi
+
+gitignore="/opt/gitignore"
+
+echo "Select the type of repository: "
+types=("1) Android" "2) Java" "3) Python" "4) C++" "5) None")
+
+for type in "${types[@]}"
+do
+  echo "$type"
+done
+
+read number
+
+if [ $number -eq 5 ]
+  then
+    git init $repo
+  else
+    name=`echo "${types[$(($number-1))]}" | cut -c 4-`
+    git init $repo
+    cat "$gitignore/$name.gitignore" > $repo/.gitignore
+    echo "Added the $name.gitignore file to $repo"
+fi
