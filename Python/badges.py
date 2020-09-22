@@ -22,8 +22,28 @@ ENDPOINT = "https://img.shields.io/badge/"
 if args.color == "":
     parser.print_help()
 else:
-    if len(sys.argv) == 3:
-        petition = petition
+    if len(sys.argv) == 2:
+        args.message = args.color
+        args.color = "success"
+
+        petition = "{ENDPOINT}{LABEL}-{MESSAGE}-{COLOR}".format(ENDPOINT=ENDPOINT, LABEL=args.label, MESSAGE=args.message, COLOR=args.color)
+        response = requests.get(petition)
+        if response.status_code == 404:
+            print("Something went wrong")
+        else:
+            subprocess.run(["sensible-browser", petition])
+    elif len(sys.argv) == 3:
+        args.message = args.color
+        args.color = "success"
+
+        petition = "{ENDPOINT}{LABEL}-{MESSAGE}-{COLOR}".format(ENDPOINT=ENDPOINT, LABEL=args.label, MESSAGE=args.message, COLOR=args.color)
+        response = requests.get(petition)
+        if response.status_code == 404:
+            print("Something went wrong")
+        else:
+            subprocess.run(["sensible-browser", petition])
+    elif len(sys.argv) == 4:
+        petition = "{ENDPOINT}{LABEL}-{MESSAGE}-{COLOR}".format(ENDPOINT=ENDPOINT, LABEL=args.label, MESSAGE=args.message, COLOR=args.color)
         response = requests.get(petition)
         if response.status_code == 404:
             print("Something went wrong")
