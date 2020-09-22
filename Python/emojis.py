@@ -2,7 +2,11 @@
 
 import argparse
 import json
-import requests
+
+# ENDPOINT = "https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json"
+
+FILE = "emojis.json"
+# TODO: Autoupdate the file of the emojis
 
 parser = argparse.ArgumentParser(description="A simple emojipedia 📚 for the CLI 💻 made by @lassa97 👨", 
                                 usage="%(prog)s [options] emoji", 
@@ -16,37 +20,42 @@ parser.add_argument("-v", "--version", action="version", help="show program's ve
 args = parser.parse_args()
 
 if args.emoji is "beer":
-    parser.print_help()
+  parser.print_help()
 elif args.match:
-    emoji_name = args.emoji
-    response = requests.get("https://raw.githubusercontent.com/Olyno/emojis-list/master/emojis.json")
-    emojis_db = json.loads(response.text)
-    emojis = {}
+  emoji_name = args.emoji
+  with open(FILE) as file:
+    emojis_db = json.loads(file.read())
 
-    for emoji in emojis_db:
-        if ":{NAME}:".format(NAME=emoji_name) in emoji['shortNames']:
-            emojis.update({emoji['emoji']: emoji['shortNames'][emoji['shortNames'].index(":{NAME}:".format(NAME=emoji_name))]})
-            break
+  emojis = {}
 
-    if len(emojis) != 0:
-        print("{EMOJI} - {NAME}".format(EMOJI=next(iter(emojis)), NAME=emojis[next(iter(emojis))]))
-    else:
-        print("❌ No emoji found 😿")
+  for emoji in emojis_db:
+    if (emoji_name in emoji['names']) or (emoji_name in emoji['tags']):
+        emojis.update({emoji['emoji']: emoji['description']})
+
+  if len(emojis) != 0:
+    for emoji in emojis:
+        print("{EMOJI}: {DESCRIPTION}".format(EMOJI=emoji, DESCRIPTION=emojis[emoji]))
+  else:
+    print("❌ No emoji found 😿")
+  
 else:
-    emoji_name = args.emoji
-    response = requests.get("https://raw.githubusercontent.com/Olyno/emojis-list/master/emojis.json")
-    emojis_db = json.loads(response.text)
-    emojis = {}
+  emoji_name = args.emoji
+  with open(FILE) as file:
+    emojis_db = json.loads(file.read())
 
-    for emoji in emojis_db:
-        exists = any(emoji_name in tmp for tmp in emoji['shortNames'])
-        if exists:
-            emojis.update({emoji['emoji']: emoji['shortNames'][0]})
-        if len(emojis) == args.limit:
-            break
+  emojis = {}
 
-    if len(emojis) != 0:
-        for emoji in emojis:
-            print("{EMOJI} - {NAME}".format(EMOJI=emoji, NAME=emojis[emoji]))
-    else:
-        print("❌ No emoji found 😿")
+  for emoji in emojis_db:
+    name_exists = any(emoji_name in tmp for tmp in emoji['names'])
+    tag_exists = any(emoji_name in tmp for tmp in emoji['tags'])
+    if name_exists or tag_exists:
+      emojis.update({emoji['emoji']: emoji['description']})
+
+    if len(emojis) == args.limit:
+      break
+
+  if len(emojis) != 0:
+    for emoji in emojis:
+      print("{EMOJI}: {DESCRIPTION}".format(EMOJI=emoji, DESCRIPTION=emojis[emoji]))
+  else:
+    print("❌ No emoji found 😿")

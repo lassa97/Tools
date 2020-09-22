@@ -4,7 +4,23 @@ Python Tools
 
 - **[emojis.py](emojis.py):** A simple script to search for an **emoji** in your CLI
 
-    Using the emojis of [Emojipedia](https://emojipedia.org/) with the help of [Olyno](https://github.com/Olyno) and his [emojis-list](https://github.com/Olyno/emojis-list)
+    Using the emojis of [Gemoji](https://github.com/github/gemoji) by [Github](https://github.com/github)
+
+    Example of an emoji stored in [emojis.json](emojis.json):
+    ```json
+    {
+        "emoji": "😀",
+        "names": [
+            "grinning"
+        ],
+        "tags": [
+            "smile",
+            "happy"
+        ],
+        "description": "grinning face",
+        "category": "Smileys & Emotion"
+    }
+    ```
 
 - **[badges.py](badges.py)** A simple script to create some badges for your GitHub repository
     
