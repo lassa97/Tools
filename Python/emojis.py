@@ -2,10 +2,12 @@
 
 import argparse
 import json
+import os
 
 # ENDPOINT = "https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json"
 
-FILE = "emojis.json"
+FILE = "{HOME}/{FOLDERS}/{FILE}".format(HOME=os.getenv("HOME"), FOLDERS="/Tools/Python", FILE="emojis.json")
+
 # TODO: Autoupdate the file of the emojis
 
 parser = argparse.ArgumentParser(description="A simple emojipedia 📚 for the CLI 💻 made by @lassa97 👨", 
